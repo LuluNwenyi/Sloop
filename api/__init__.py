@@ -38,9 +38,11 @@ def create_app(config_name):
     from api.views import default as default_blueprint
     from api.authentication.routes import auth as auth_blueprint
     from api.user.routes import user as user_blueprint
+    from api.creator.routes import creator as creator_blueprint
 
     app.register_blueprint(default_blueprint)
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(user_blueprint)
+    app.register_blueprint(creator_blueprint)
 
     return app

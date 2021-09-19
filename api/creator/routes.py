@@ -8,11 +8,11 @@ from api import db
 import uuid
 
 # DECLARE BLUEPRINT
-user = Blueprint('user', __name__)
+creator = Blueprint('creator', __name__)
 
-# CREATE USER
-@user.route('/sign-up', methods=['POST'])
-def create_user():
+# SIGN UP FOR CREATORS
+@creator.route('/creator/sign-up', methods=['POST'])
+def add_creator():
 
     # QUERY IF USER EXISTS
     user = User.query.filter_by(email=request.json['email']).first()
@@ -26,7 +26,7 @@ def create_user():
             password = request.json['password']
             password = generate_password_hash(password)
 
-            new_user = User(username=username, email=email, password=password, admin=False, creator=False,  public_id=str(uuid.uuid4()))  
+            new_user = User(username=username, email=email, password=password, admin=False, creator=True,  public_id=str(uuid.uuid4()))  
 
             db.session.add(new_user)
             db.session.commit()
@@ -54,9 +54,9 @@ def create_user():
 
 
 # GET USER BY ID
-@user.route('/user/<public_id>', methods=['GET'])
+@creator.route('/creator/<public_id>', methods=['GET'])
 @admin_required
-def get_user(public_id):
+def get_creator(public_id):
 
     # GET THE USER
     user = User.query.filter_by(public_id=public_id).first()
@@ -78,9 +78,9 @@ def get_user(public_id):
 
 
 # GET ALL USERS
-@user.route('/users', methods=['GET'])
+@creator.route('/creators', methods=['GET'])
 @admin_required
-def get_all_users():
+def get_all_creators():
 
     # GET ALL THE USERS
     users = User.query.all()
@@ -104,9 +104,9 @@ def get_all_users():
 
 
 # EDIT USER
-@user.route('/user/<public_id>', methods=['PUT'])
+@creator.route('/creator/<public_id>', methods=['PUT'])
 @admin_required
-def edit_user(public_id):
+def edit_creator(public_id):
 
     # GET THE USER
     user = User.query.filter_by(public_id=public_id).first()
@@ -126,7 +126,7 @@ def edit_user(public_id):
             db.session.commit()
 
             response = {
-                "message" : "You have edited this user successfully!"
+                "message" : "You have edited this creator successfully!"
             }
 
             return jsonify(response), 201
@@ -141,9 +141,9 @@ def edit_user(public_id):
 
 
 # PROMOTE USER TO CREATOR
-@user.route('/user/<public_id>', methods=['PATCH'])
+@creator.route('/creator/<public_id>', methods=['PATCH'])
 @admin_required
-def promote_user(public_id):
+def demote_creator(public_id):
 
     # GET THE USER
     user = User.query.filter_by(public_id=public_id).first()
@@ -154,12 +154,12 @@ def promote_user(public_id):
     else:
         try:
             # EDIT THE USER
-            user.creator = True
+            user.creator = False
 
             db.session.commit()
 
             response = {
-                "message" : "You have promoted this user to creator successfully!"
+                "message" : "You have demoted this creator to user."
             }
 
             return jsonify(response), 201
@@ -174,7 +174,7 @@ def promote_user(public_id):
 
 
 # DELETE USER
-@user.route('/user/<public_id>', methods=['DELETE'])
+@creator.route('/creator/<public_id>', methods=['DELETE'])
 @admin_required
 def delete_user(public_id):
 
@@ -191,7 +191,7 @@ def delete_user(public_id):
             db.session.commit()
 
             response = {
-                "message" : "You have deleted this user successfully!"
+                "message" : "You have deleted this creator successfully!"
             }
 
             return jsonify(response), 201
