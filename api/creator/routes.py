@@ -53,7 +53,7 @@ def add_creator():
 
 
 
-# GET USER BY ID
+# GET CREATOR BY ID
 @creator.route('/creator/<public_id>', methods=['GET'])
 @admin_required
 def get_creator(public_id):
@@ -77,7 +77,7 @@ def get_creator(public_id):
 
 
 
-# GET ALL USERS
+# GET ALL CREATORS
 @creator.route('/creators', methods=['GET'])
 @admin_required
 def get_all_creators():
@@ -103,7 +103,7 @@ def get_all_creators():
 
 
 
-# EDIT USER
+# EDIT CREATOR
 @creator.route('/creator/<public_id>', methods=['PUT'])
 @admin_required
 def edit_creator(public_id):
@@ -140,7 +140,7 @@ def edit_creator(public_id):
 
 
 
-# PROMOTE USER TO CREATOR
+# DEMOTE CREATOR TO USER
 @creator.route('/creator/<public_id>', methods=['PATCH'])
 @admin_required
 def demote_creator(public_id):
@@ -173,7 +173,7 @@ def demote_creator(public_id):
 
 
 
-# DELETE USER
+# DELETE CREATOR
 @creator.route('/creator/<public_id>', methods=['DELETE'])
 @admin_required
 def delete_user(public_id):
